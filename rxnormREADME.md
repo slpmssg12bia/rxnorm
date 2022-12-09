@@ -1,4 +1,8 @@
-# Cron jobs For Data Parsing 
+# Create Environment 
+Ubuntu, t2micro, generate key (or select existing), select default security group, configure storage: 20, 
+modify IAM role > select AmazonS3fullaccess, user must have SSH security access, connect with putty, log into server as user: ubuntu
+
+# Update Environment 
 
 ```
 sudo apt update 
@@ -6,7 +10,6 @@ sudo apt update
 sudo apt install unzip
 
 sudo apt install python3-pip -y
-
 ```
 # Install AWS CLI 
 ```
@@ -32,37 +35,77 @@ json
 
 # Clone Git Repository
 ```
-git clone https://github.com/slpmssg12bia/nppes.git
+git clone https://github.com/slpmssg12bia/rxnorm.git
 ```
 # cd into the repository
 ```
-cd nppes
+cd rxnorm
 ```
-# change permission of .sh files
+# Recreate bash Files
 ```
-chmod +x   nppes_clean.sh  nppes_dump_to_s3.sh  nppes_cron.sh
+touch rxnorm_clean.sh
+nano rxnorm_clean.sh
+
+#!/bin/bash
+rm -rf rxnormdump
+rm db.zip
+
+ctrl X
+Y
+---------------------------------
+touch rxnorm_dump_to_s3.sh
+nano rxnorm_dump_to_s3.sh
+
+#!/bin/bash
+mkdir rxnormdump
+mv *.csv *.pdf rxnormdump
+aws s3 sync rxnormdump/ s3://viquity-database-import-us-east-1/Jobs/rxnorm/rxnormdump-"$(date +%d-%m-%y-%H-%M)"/
+
+ctrl X
+Y
+------------------------
+touch rxnorm_cron.sh
+nano rxnorm_cron.sh
+
+#!/bin/bash
+cd /home/ubuntu/rxnorm
+python3 rxnorm_cron.py
+
+ctrl X
+Y
+```
+# Delete Original bash files
+```
+rm clean.sh  dump_to_s3.sh  cron.sh
+```
+
+# Change Permissions of bash Files
+```
+chmod +x   rxnorm_clean.sh  rxnorm_dump_to_s3.sh  rxnorm_cron.sh
 ```
 
 # install pip dependencies
 ```
-pip install -r nppes_requirements.txt 
+pip install -r rxnorm_requirements.txt 
 ```
 # install Cron jobs for Parsing
 ```
 pwd
+
 sudo apt-get install cron
 ```
 # Open Cron Tab
 ```
 sudo su
 
-nano /etc/crontab
+pip install -r rxnorm_requirements.txt 
 
-1
+nano /etc/crontab
 ```
-# Create Cron Job
+# Create Cron Job ~ https://crontab.guru/examples.html
 ```
-0 0 1 * *  root bash /home/ubuntu/nppes/nppes_cron.sh
+0 0 17 * *  root bash /home/ubuntu/rxnorm/rxnorm_cron.sh
+!!!CARRIAGE RETURN after line above!!!!!
 
 ctrl x
 
