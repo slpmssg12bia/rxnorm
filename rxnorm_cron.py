@@ -1,5 +1,11 @@
 #!/usr/bin/python
 
+import subprocess
+import re
+from bs4 import BeautifulSoup
+import requests
+import wget
+
 def get_urls(soup):
     urls = []
     for a in soup.find_all('a', href=True):
