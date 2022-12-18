@@ -3,9 +3,8 @@
 import subprocess
 import re
 from bs4 import BeautifulSoup
-import requests
 import wget
-import zipfile, requests
+import zipfile, requests, time
 from io import BytesIO
 
 dump_folder = "rxnormdump"
