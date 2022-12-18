@@ -1,4 +1,6 @@
 requests
+zipfile
 wget==3.2
 bs4==0.0.1
 boto3==1.24.89
+BytesIO
