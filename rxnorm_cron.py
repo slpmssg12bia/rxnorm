@@ -28,9 +28,6 @@ def download_and_extract(url):
     zip_file = zipfile.ZipFile(content)
     zip_file.extractall(file_name)
         
-        subprocess.run(["mv", slashurl[1], "db.zip"])
-        subprocess.run(["unzip", "db.zip"])
-        print("uploading the latest dump to s3")
         subprocess.run(["bash", "/home/ubuntu/rxnorm/rxnorm_dump_to_s3.sh"])
         subprocess.run(["bash", "/home/ubuntu/rxnorm/rxnorm_clean.sh"])
         return
