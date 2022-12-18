@@ -1,11 +1,9 @@
 #!/usr/bin/python
 
-import subprocess
-import re
+import zipfile, requests, time, subprocess
 from bs4 import BeautifulSoup
-import wget
-import zipfile, requests, time
 from io import BytesIO
+
 
 dump_folder = "rxnormdump"
 
@@ -24,7 +22,7 @@ def download_and_extract(url):
     downloaded = 0
     start = time.time()
     with requests.get(link, stream=True) as r:
-        for chunk in r.iter_content(chunk_size=8192):
+        for chunk in r.iter_content(chunk_size=1024):
             downloaded += len(chunk)
             print(f"Downloaded {downloaded / 1024 / 1024:.2f} MB", end="\r", flush=True)
             content.write(chunk)
