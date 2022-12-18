@@ -101,7 +101,7 @@ nano /etc/crontab
 ```
 # Create Cron Job ~ https://crontab.guru/examples.html
 ```
-0 0 17 * *  root bash /home/ubuntu/rxnorm/rxnorm_cron.sh
+0 0 10 * *  root bash /home/ubuntu/rxnorm/rxnorm_cron.sh
 !!!CARRIAGE RETURN after line above!!!!!
 
 ctrl x
