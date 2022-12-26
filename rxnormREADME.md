@@ -43,6 +43,17 @@ cd rxnorm
 ```
 # Recreate bash Files
 ```
+
+touch rxnorm_archive_s3.sh
+nano rxnorm_archive_s3.sh
+
+#!/bin/bash
+aws s3 sync rxnormdump/ s3://viquity-database-import-us-east-1/Jobs/rxnorm/rxnorm_archive/rxnormdump-"$(date +%d-%m-%y-%H-%M)"/
+
+ctrl X
+Y
+
+---------------------------------
 touch rxnorm_clean.sh
 nano rxnorm_clean.sh
 
@@ -52,15 +63,6 @@ rm -rf rxnormdump
 ctrl X
 Y
 ---------------------------------
-touch rxnorm_dump_to_s3.sh
-nano rxnorm_dump_to_s3.sh
-
-#!/bin/bash
-aws s3 sync rxnormdump/ s3://viquity-database-import-us-east-1/Jobs/rxnorm/rxnormdump-"$(date +%d-%m-%y-%H-%M)"/
-
-ctrl X
-Y
-------------------------
 touch rxnorm_cron.sh
 nano rxnorm_cron.sh
 
@@ -70,15 +72,37 @@ python3 rxnorm_cron.py
 
 ctrl X
 Y
+---------------------------------
+
+touch rxnorm_dump_to_s3.sh
+nano rxnorm_dump_to_s3.sh
+
+#!/bin/bash
+aws s3 sync rxnormdump/ s3://viquity-database-import-us-east-1/Jobs/rxnorm/rxnorm_current_dump/rxnormdump/
+
+ctrl X
+Y
+---------------------------------
+
+touch rxnorm_remove_old_dump.sh
+nano rxnorm_remove_old_dump.sh
+
+#!/bin/bash
+aws s3 rm s3://viquity-database-import-us-east-1/Jobs/rxnorm/rxnorm_current_dump --recursive
+
+ctrl X
+Y
 ```
+
 # Delete Original bash files
 ```
-rm clean.sh  dump_to_s3.sh  cron.sh
+rm archive_s3.sh  clean.sh  cron.sh  dump_to_s3.sh  remove_old_dump.sh 
 ```
 
 # Change Permissions of bash Files
 ```
-chmod +x   rxnorm_clean.sh  rxnorm_dump_to_s3.sh  rxnorm_cron.sh
+chmod +x   rxnorm_archive_s3.sh  rxnorm_clean.sh  rxnorm_cron.sh  rxnorm_dump_to_s3.sh  rxnorm_remove_old_dump.sh     
+
 ```
 
 # install pip dependencies
