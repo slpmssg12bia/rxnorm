@@ -33,9 +33,11 @@ def download_and_extract(url):
     content.seek(0)
     zip_file = zipfile.ZipFile(content)
     zip_file.extractall(dump_folder)
+    
+    subprocess.run(["bash", "/home/ubuntu/rxnorm/rxnorm_remove_old_dump.sh"])
     subprocess.run(["bash", "/home/ubuntu/rxnorm/rxnorm_dump_to_s3.sh"])
+    subprocess.run(["bash", "/home/ubuntu/rxnorm/rxnorm_archive_s3.sh"])
     subprocess.run(["bash", "/home/ubuntu/rxnorm/rxnorm_clean.sh"])
-
 
 r = requests.get('https://www.nlm.nih.gov/research/umls/rxnorm/docs/rxnormfiles.html?_gl=1')
 soup = BeautifulSoup(r.text, 'html.parser')
